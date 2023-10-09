@@ -21,14 +21,14 @@
     </tr>
     <c:forEach var="meal" items="${mealList}">
         <tr style="color:${meal.isExcess() ? 'red' : 'green'}">
-            <td>${meal.getDateTime().format(dateTimeFormatter)}</td>
-            <td>${meal.getDescription()}</td>
-            <td>${meal.getCalories()}</td>
+            <td>${meal.dateTime.format(dateTimeFormatter)}</td>
+            <td>${meal.description}</td>
+            <td>${meal.calories}</td>
             <td>
-                <button onclick="window.location='meals?action=edit&mealId=${meal.getId()}'">Update</button>
+                <button onclick="window.location='meals?action=edit&mealId=${meal.id}'">Update</button>
             </td>
             <td>
-                <button onclick="window.location='meals?action=delete&mealId=${meal.getId()}'">Delete</button>
+                <button onclick="window.location='meals?action=delete&mealId=${meal.id}'">Delete</button>
             </td>
         </tr>
     </c:forEach>
