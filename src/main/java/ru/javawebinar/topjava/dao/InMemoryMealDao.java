@@ -35,22 +35,19 @@ public class InMemoryMealDao implements MealDao {
             Meal newMeal = new Meal(newId, meal.getDateTime(), meal.getDescription(), meal.getCalories());
             mealMap.put(newId, newMeal);
             return newMeal;
-        } else if (mealMap.containsKey(meal.getId())) {
-            mealMap.put(meal.getId(), meal);
-            return meal;
         } else {
-            return null;
+            return mealMap.computeIfPresent(meal.getId(), (k, v) -> meal);
         }
     }
 
     @Override
-    public Meal getById(Integer id) {
+    public Meal getById(int id) {
         log.debug("called method getById from MealDAO");
         return mealMap.get(id);
     }
 
     @Override
-    public void delete(Integer id) {
+    public void delete(int id) {
         log.debug("called method delete from MealDAO");
         mealMap.remove(id);
     }

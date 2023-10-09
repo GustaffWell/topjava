@@ -20,7 +20,7 @@
         <th colspan="2">Action</th>
     </tr>
     <c:forEach var="meal" items="${mealList}">
-        <tr style="color:${meal.isExcess() ? 'red' : 'green'}">
+        <tr style="color:${meal.excess ? 'red' : 'green'}">
             <td>${meal.dateTime.format(dateTimeFormatter)}</td>
             <td>${meal.description}</td>
             <td>${meal.calories}</td>

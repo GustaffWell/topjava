@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 import static org.slf4j.LoggerFactory.getLogger;
@@ -45,11 +46,7 @@ public class MealServlet extends HttpServlet {
             case "insert": {
                 forward = INSERT_OR_EDIT;
                 LocalDateTime currentDateTime = LocalDateTime.now();
-                request.setAttribute("currentDateTime", LocalDateTime.of(currentDateTime.getYear(),
-                        currentDateTime.getMonth(),
-                        currentDateTime.getDayOfMonth(),
-                        currentDateTime.getHour(),
-                        currentDateTime.getMinute()));
+                request.setAttribute("currentDateTime", currentDateTime.truncatedTo(ChronoUnit.MINUTES));
                 break;
             }
             case "edit": {
@@ -88,6 +85,6 @@ public class MealServlet extends HttpServlet {
 
     private Integer getId(HttpServletRequest request) {
         String idString = request.getParameter("mealId");
-        return idString.equals("") ? null : Integer.parseInt(idString);
+        return idString.isEmpty() ? null : Integer.parseInt(idString);
     }
 }
