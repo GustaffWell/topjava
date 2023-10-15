@@ -14,6 +14,18 @@
         .excess {
             color: red;
         }
+
+        .dateTimeFilterTitle {
+            font-size: 12px;
+        }
+
+        .dateTimeFilter {
+            display: flex;
+        }
+
+        .dateTimeFilterGroup {
+            margin-right: 50px;
+        }
     </style>
 </head>
 <body>
@@ -21,6 +33,30 @@
     <h3><a href="index.html">Home</a></h3>
     <hr/>
     <h2>Meals</h2>
+    <hr>
+    <form method="get" action="meals">
+        <div class="dateTimeFilter">
+            <div class="dateTimeFilterGroup">
+                <h3 class="dateTimeFilterTitle">От даты(включая)</h3>
+                <input type="date" name="startDate" value="${startDate}">
+            </div>
+            <div class="dateTimeFilterGroup">
+                <h3 class="dateTimeFilterTitle">До даты(включая)</h3>
+                <input type="date" name="endDate" value="${endDate == null ? endDate : endDate.minusDays(1)}">
+            </div>
+            <div class="dateTimeFilterGroup">
+                <h3 class="dateTimeFilterTitle">От времени(включая)</h3>
+                <input type="time" name="startTime" value="${startTime}">
+            </div>
+            <div class="dateTimeFilterGroup">
+                <h3 class="dateTimeFilterTitle">До времени(исключая)</h3>
+                <input type="time" name="endTime" value="${endTime}">
+            </div>
+        </div>
+        <br>
+        <button type="submit">Filter</button>
+    </form>
+    <hr>
     <a href="meals?action=create">Add Meal</a>
     <br><br>
     <table border="1" cellpadding="8" cellspacing="0">
@@ -34,7 +70,7 @@
         </tr>
         </thead>
         <c:forEach items="${requestScope.meals}" var="meal">
-            <jsp:useBean id="meal" type="ru.javawebinar.topjava.model.MealTo"/>
+            <jsp:useBean id="meal" type="ru.javawebinar.topjava.to.MealTo"/>
             <tr class="${meal.excess ? 'excess' : 'normal'}">
                 <td>
                         <%--${meal.dateTime.toLocalDate()} ${meal.dateTime.toLocalTime()}--%>
