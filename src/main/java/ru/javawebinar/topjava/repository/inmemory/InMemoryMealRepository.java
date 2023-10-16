@@ -9,10 +9,10 @@ import ru.javawebinar.topjava.util.DateTimeUtil;
 import ru.javawebinar.topjava.util.MealsUtil;
 
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 @Repository
@@ -31,7 +31,7 @@ public class InMemoryMealRepository implements MealRepository {
     public Meal save(int userId, Meal meal) {
         log.info("save {}", meal);
 
-        Map<Integer, Meal> userMeals = repository.computeIfAbsent(userId, map -> new ConcurrentHashMap<>());
+        Map<Integer, Meal> userMeals = repository.computeIfAbsent(userId, newUserMeals -> new ConcurrentHashMap<>());
         if (meal.isNew()) {
             meal.setId(counter.getAndIncrement());
             userMeals.put(meal.getId(), meal);
@@ -57,22 +57,21 @@ public class InMemoryMealRepository implements MealRepository {
     @Override
     public List<Meal> getAll(int userId) {
         log.info("getAll {}", userId);
-        Map<Integer, Meal> userMeals = repository.get(userId);
-        if (userMeals == null) {
-            return Collections.emptyList();
-        }
-        return userMeals.values().stream()
-                .sorted(dateTimeMealComparator)
-                .collect(Collectors.toList());
+        return filteredByPredicate(repository.get(userId).values(), meal -> true);
     }
 
     @Override
-    public List<Meal> getFiltered(int userId, LocalDate startDate, LocalDate endDate,
-                                    LocalTime startTime, LocalTime endTime) {
+    public List<Meal> getFiltered(int userId, LocalDate startDate, LocalDate endDate) {
         log.info("getFiltered {}", userId);
-        return getAll(userId).stream()
-                .filter(meal -> DateTimeUtil.isBetweenHalfOpen(meal.getDateTime().toLocalDate(), startDate, endDate))
-                .filter(meal -> DateTimeUtil.isBetweenHalfOpen(meal.getDateTime().toLocalTime(), startTime, endTime))
+        return filteredByPredicate(repository.get(userId).values(),
+                meal -> DateTimeUtil.isBetweenHalfOpen(meal.getDateTime().toLocalDate(), startDate, endDate));
+
+    }
+
+    private List<Meal> filteredByPredicate(Collection<Meal> meals, Predicate<Meal> filter) {
+        return meals == null ? Collections.emptyList() : meals.stream()
+                .filter(filter)
+                .sorted(dateTimeMealComparator)
                 .collect(Collectors.toList());
     }
 }
