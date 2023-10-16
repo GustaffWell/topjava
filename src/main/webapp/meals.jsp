@@ -38,19 +38,19 @@
         <div class="dateTimeFilter">
             <div class="dateTimeFilterGroup">
                 <h3 class="dateTimeFilterTitle">От даты(включая)</h3>
-                <input type="date" name="startDate" value="${startDate}">
+                <input type="date" name="startDate" value="${param.startDate}">
             </div>
             <div class="dateTimeFilterGroup">
                 <h3 class="dateTimeFilterTitle">До даты(включая)</h3>
-                <input type="date" name="endDate" value="${endDate == null ? endDate : endDate.minusDays(1)}">
+                <input type="date" name="endDate" value="${param.endDate}">
             </div>
             <div class="dateTimeFilterGroup">
                 <h3 class="dateTimeFilterTitle">От времени(включая)</h3>
-                <input type="time" name="startTime" value="${startTime}">
+                <input type="time" name="startTime" value="${param.startTime}">
             </div>
             <div class="dateTimeFilterGroup">
                 <h3 class="dateTimeFilterTitle">До времени(исключая)</h3>
-                <input type="time" name="endTime" value="${endTime}">
+                <input type="time" name="endTime" value="${param.endTime}">
             </div>
         </div>
         <br>

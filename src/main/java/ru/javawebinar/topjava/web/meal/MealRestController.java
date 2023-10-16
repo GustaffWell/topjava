@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.service.MealService;
 import ru.javawebinar.topjava.to.MealTo;
+import ru.javawebinar.topjava.util.DateTimeUtil;
 import ru.javawebinar.topjava.util.MealsUtil;
 import ru.javawebinar.topjava.web.SecurityUtil;
 
@@ -19,7 +20,7 @@ import static ru.javawebinar.topjava.util.ValidationUtil.checkNew;
 
 @Controller
 public class MealRestController {
-    protected final Logger log = LoggerFactory.getLogger(getClass());
+    private final Logger log = LoggerFactory.getLogger(getClass());
 
     @Autowired
     private MealService service;
@@ -29,16 +30,16 @@ public class MealRestController {
         return MealsUtil.getTos(service.getAll(SecurityUtil.getAuthUserId()), SecurityUtil.authUserCaloriesPerDay());
     }
 
-    public List<MealTo> getFilteredAll(LocalDate startDate, LocalDate endDate, LocalTime startTime, LocalTime endTime) {
+    public List<MealTo> getFiltered(LocalDate startDate, LocalDate endDate, LocalTime startTime, LocalTime endTime) {
         log.info("getFilteredAll");
-        return MealsUtil.getFilteredTos(service.getAll(SecurityUtil.getAuthUserId()),
-                SecurityUtil.authUserCaloriesPerDay(),
-                startDate, endDate, startTime, endTime);
+        return service.getFiltered(SecurityUtil.getAuthUserId(),
+                DateTimeUtil.analyzeStartDate(startDate), DateTimeUtil.analyzeEndDate(endDate),
+                DateTimeUtil.analyzeStartTime(startTime), DateTimeUtil.analyzeEndTime(endTime));
     }
 
-    public boolean delete(int mealId) {
+    public void delete(int mealId) {
         log.info("delete {}", mealId);
-        return service.delete(SecurityUtil.getAuthUserId(), mealId);
+        service.delete(SecurityUtil.getAuthUserId(), mealId);
     }
 
     public Meal get(int mealId) {

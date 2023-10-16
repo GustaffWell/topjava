@@ -3,9 +3,11 @@ package ru.javawebinar.topjava.service;
 import org.springframework.stereotype.Service;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.repository.MealRepository;
-import ru.javawebinar.topjava.repository.inmemory.InMemoryMealRepository;
+import ru.javawebinar.topjava.to.MealTo;
 
-import java.util.Collection;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.List;
 
 import static ru.javawebinar.topjava.util.ValidationUtil.checkNotFoundWithId;
 
@@ -22,20 +24,24 @@ public class MealService {
         checkNotFoundWithId(repository.save(userId, meal), meal.getId());
     }
 
-    public Meal create(int userId ,Meal meal) {
+    public Meal create(int userId, Meal meal) {
         return repository.save(userId, meal);
     }
 
-    public boolean delete(int userId, int mealId) {
+    public void delete(int userId, int mealId) {
         checkNotFoundWithId(repository.delete(userId, mealId), mealId);
-        return true;
     }
 
     public Meal get(int userId, int mealId) {
         return checkNotFoundWithId(repository.get(userId, mealId), mealId);
     }
 
-    public Collection<Meal> getAll(int userId) {
-        return checkNotFoundWithId(repository.getAll(userId), userId);
+    public List<Meal> getAll(int userId) {
+        return repository.getAll(userId);
+    }
+
+    public List<MealTo> getFiltered(int userId, LocalDate startDate, LocalDate endDate,
+                                    LocalTime startTime, LocalTime endTime) {
+        return checkNotFoundWithId(repository.getFiltered(userId, startDate, endDate, startTime, endTime), userId);
     }
 }
