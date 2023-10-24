@@ -5,6 +5,7 @@ import org.junit.runner.RunWith;
 import org.slf4j.bridge.SLF4JBridgeHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlConfig;
@@ -13,10 +14,8 @@ import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
 
 import java.time.LocalDate;
-import java.util.Comparator;
+import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static org.junit.Assert.assertThrows;
 import static ru.javawebinar.topjava.MealTestData.*;
@@ -39,12 +38,17 @@ public class MealServiceTest {
     @Test
     public void get() {
         Meal meal = service.get(USER_MEAL_1_ID, USER_ID);
-        assertMatch(meal, USER_MEAL_1);
+        assertMatch(meal, userMeal1);
     }
 
     @Test
     public void getNotFound() {
         assertThrows(NotFoundException.class, () -> service.get(NOT_FOUND_MEAL_ID, USER_ID));
+    }
+
+    @Test
+    public void getSomeoneMeal() {
+        assertThrows(NotFoundException.class, () -> service.get(USER_MEAL_1_ID, ADMIN_ID));
     }
 
     @Test
@@ -59,21 +63,24 @@ public class MealServiceTest {
     }
 
     @Test
+    public void deleteSomeoneMeal() {
+        assertThrows(NotFoundException.class, () -> service.delete(USER_MEAL_1_ID, ADMIN_ID));
+    }
+
+    @Test
     public void getBetweenInclusive() {
         List<Meal> filteredUser1Meals = service.getBetweenInclusive(LocalDate.of(2020, 1, 30),
                 LocalDate.of(2020, 1, 31), USER_ID);
-        List<Meal> user1TestDataList = Stream.of(USER_MEAL_1, USER_MEAL_2, USER_MEAL_3, USER_MEAL_4,
-                        USER_MEAL_5, USER_MEAL_6, USER_MEAL_7)
-                .sorted(Comparator.comparing(Meal::getDateTime).reversed()).collect(Collectors.toList());
+        List<Meal> user1TestDataList = Arrays.asList(userMeal7, userMeal6, userMeal5, userMeal4,
+                userMeal3, userMeal2, userMeal1);
         assertMatch(filteredUser1Meals, user1TestDataList);
     }
 
     @Test
     public void getAll() {
         List<Meal> allUser1Meals = service.getAll(USER_ID);
-        List<Meal> user1TestDataList = Stream.of(USER_MEAL_1, USER_MEAL_2, USER_MEAL_3, USER_MEAL_4,
-                        USER_MEAL_5, USER_MEAL_6, USER_MEAL_7, USER_MEAL_8)
-                .sorted(Comparator.comparing(Meal::getDateTime).reversed()).collect(Collectors.toList());
+        List<Meal> user1TestDataList = Arrays.asList(userMeal8, userMeal7, userMeal6, userMeal5,
+                userMeal4, userMeal3, userMeal2, userMeal1);
         assertMatch(allUser1Meals, user1TestDataList);
     }
 
@@ -82,6 +89,12 @@ public class MealServiceTest {
         Meal updated = getUpdated();
         service.update(updated, USER_ID);
         assertMatch(service.get(USER_MEAL_1_ID, USER_ID), getUpdated());
+    }
+
+    @Test
+    public void updateSomeoneMeal() {
+        Meal updated = getUpdated();
+        assertThrows(NotFoundException.class, () -> service.update(updated, ADMIN_ID));
     }
 
     @Test
@@ -97,6 +110,6 @@ public class MealServiceTest {
     @Test
     public void duplicateDateTimeCreate() {
         assertThrows(DataAccessException.class, () ->
-                service.create(new Meal(USER_MEAL_1.getDateTime(), "duplicate dateTime", 500), USER_ID));
+                service.create(new Meal(userMeal1.getDateTime(), "duplicate dateTime", 500), USER_ID));
     }
 }

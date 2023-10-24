@@ -29,7 +29,7 @@ CREATE TABLE meals
 (
     user_id         INTEGER                             NOT NULL,
     id              INTEGER PRIMARY KEY DEFAULT nextval('global_seq'),
-    date_time        TIMESTAMP             DEFAULT now() NOT NULL,
+    date_time       TIMESTAMP                           NOT NULL,
     description     VARCHAR                             NOT NULL,
     calories        INTEGER                             NOT NULL,
     CONSTRAINT meals_unique_datetime_user_idx UNIQUE (user_id, date_time),
