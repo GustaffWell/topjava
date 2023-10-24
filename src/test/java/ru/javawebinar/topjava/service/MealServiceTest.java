@@ -5,7 +5,6 @@ import org.junit.runner.RunWith;
 import org.slf4j.bridge.SLF4JBridgeHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlConfig;
@@ -19,10 +18,13 @@ import java.util.List;
 
 import static org.junit.Assert.assertThrows;
 import static ru.javawebinar.topjava.MealTestData.*;
+import static ru.javawebinar.topjava.UserTestData.ADMIN_ID;
+import static ru.javawebinar.topjava.UserTestData.USER_ID;
 
 @ContextConfiguration({
-        "classpath:spring/spring-app.xml",
-        "classpath:spring/spring-db.xml"
+        "classpath:spring/spring-jdbc-repository.xml",
+        "classpath:spring/spring-db.xml",
+        "classpath:spring/spring-service-and-web.xml"
 })
 @RunWith(SpringRunner.class)
 @Sql(scripts = "classpath:db/populateDB.sql", config = @SqlConfig(encoding = "UTF-8"))
@@ -47,7 +49,7 @@ public class MealServiceTest {
     }
 
     @Test
-    public void getSomeoneMeal() {
+    public void getSomeoneElse() {
         assertThrows(NotFoundException.class, () -> service.get(USER_MEAL_1_ID, ADMIN_ID));
     }
 
@@ -63,7 +65,7 @@ public class MealServiceTest {
     }
 
     @Test
-    public void deleteSomeoneMeal() {
+    public void deleteSomeoneElse() {
         assertThrows(NotFoundException.class, () -> service.delete(USER_MEAL_1_ID, ADMIN_ID));
     }
 
@@ -73,6 +75,14 @@ public class MealServiceTest {
                 LocalDate.of(2020, 1, 31), USER_ID);
         List<Meal> user1TestDataList = Arrays.asList(userMeal7, userMeal6, userMeal5, userMeal4,
                 userMeal3, userMeal2, userMeal1);
+        assertMatch(filteredUser1Meals, user1TestDataList);
+    }
+
+    @Test
+    public void getBetweenInclusiveWithEmptyBorders() {
+        List<Meal> filteredUser1Meals = service.getBetweenInclusive(null, null, USER_ID);
+        List<Meal> user1TestDataList = Arrays.asList(userMeal8, userMeal7, userMeal6, userMeal5,
+                userMeal4, userMeal3, userMeal2, userMeal1);
         assertMatch(filteredUser1Meals, user1TestDataList);
     }
 
@@ -92,7 +102,7 @@ public class MealServiceTest {
     }
 
     @Test
-    public void updateSomeoneMeal() {
+    public void updateSomeoneElse() {
         Meal updated = getUpdated();
         assertThrows(NotFoundException.class, () -> service.update(updated, ADMIN_ID));
     }

@@ -10,8 +10,6 @@ import static ru.javawebinar.topjava.model.AbstractBaseEntity.START_SEQ;
 
 public class MealTestData {
     public static final int USER_MEAL_1_ID = START_SEQ + 3;
-    public static final int USER_ID = START_SEQ;
-    public static final int ADMIN_ID = START_SEQ + 1;
     public static final int NOT_FOUND_MEAL_ID = 10;
 
     public static final Meal userMeal1 = new Meal(USER_MEAL_1_ID,
