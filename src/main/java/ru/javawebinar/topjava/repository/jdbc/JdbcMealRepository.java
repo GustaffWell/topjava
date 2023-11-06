@@ -33,7 +33,7 @@ public abstract class JdbcMealRepository<T> implements MealRepository {
 
     @Autowired
     private void setInsertMeal(JdbcTemplate jdbcTemplate) {
-       this.insertMeal = new SimpleJdbcInsert(jdbcTemplate)
+        this.insertMeal = new SimpleJdbcInsert(jdbcTemplate)
                 .withTableName("meal")
                 .usingGeneratedKeyColumns("id");
     }
