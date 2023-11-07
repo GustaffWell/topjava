@@ -1,6 +1,5 @@
 package ru.javawebinar.topjava.web;
 
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.context.support.GenericXmlApplicationContext;
 import org.springframework.util.StringUtils;
 import ru.javawebinar.topjava.Profiles;
