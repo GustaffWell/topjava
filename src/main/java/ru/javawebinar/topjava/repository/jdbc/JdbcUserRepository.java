@@ -15,14 +15,13 @@ import ru.javawebinar.topjava.repository.UserRepository;
 import ru.javawebinar.topjava.util.ValidationUtil;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Repository
 @Transactional(readOnly = true)
 public class JdbcUserRepository implements UserRepository {
 
     private static final BeanPropertyRowMapper<User> ROW_MAPPER = BeanPropertyRowMapper.newInstance(User.class);
-    
+
     private final JdbcTemplate jdbcTemplate;
 
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
@@ -83,10 +82,10 @@ public class JdbcUserRepository implements UserRepository {
         List<User> users = jdbcTemplate.query("SELECT * FROM users ORDER BY name, email", ROW_MAPPER);
         Map<Integer, Set<Role>> userRolesMap = new HashMap<>();
         jdbcTemplate.query("SELECT * FROM user_role",
-                        rs ->{
-                            userRolesMap.computeIfAbsent(rs.getInt("user_id"),
-                                    userId -> new HashSet<>()).add(Role.valueOf(rs.getString("role")));
-                        });
+                rs -> {
+                    userRolesMap.computeIfAbsent(rs.getInt("user_id"),
+                            userId -> new HashSet<>()).add(Role.valueOf(rs.getString("role")));
+                });
         users.forEach(user -> user.setRoles(userRolesMap.get(user.getId())));
         return users;
     }
