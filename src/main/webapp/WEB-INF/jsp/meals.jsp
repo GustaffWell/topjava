@@ -10,7 +10,7 @@
 <jsp:include page="fragments/bodyHeader.jsp"/>
 <br>
 <section>
-    <h2><spring:message code="meal.title"/></h2>
+    <h2><spring:message code="meal.MyTitle"/></h2>
     <form method="get" action="${root}meals/filter">
         <dl>
             <dt><spring:message code="meal.fromDate"/></dt>
