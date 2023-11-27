@@ -13,6 +13,7 @@ import ru.javawebinar.topjava.web.AbstractControllerTest;
 import ru.javawebinar.topjava.web.SecurityUtil;
 import ru.javawebinar.topjava.web.json.JsonUtil;
 
+import java.time.LocalTime;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -81,10 +82,12 @@ class MealRestControllerTest extends AbstractControllerTest {
 
     @Test
     void getBetween() throws Exception {
-        perform(MockMvcRequestBuilders.get(REST_URL + "between?startDateTime=2020-01-30T00:00:00&" +
-                "endDateTime=2020-01-30T14:00:00"))
+        perform(MockMvcRequestBuilders.get(REST_URL + "between?startDate=2020-01-30&endDate=2020-01-31" +
+                "&startTime=00:00&endTime=14:00"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(MEAL_TO_MATCHER.contentJson(MealsUtil.getTos(List.of(meal2, meal1), SecurityUtil.authUserCaloriesPerDay())));
+                .andExpect(MEAL_TO_MATCHER.contentJson(MealsUtil.getFilteredTos(
+                        List.of(meal7, meal6, meal5, meal4, meal2, meal1), SecurityUtil.authUserCaloriesPerDay(),
+                        LocalTime.of(0, 0), LocalTime.of(14, 0))));
     }
 }

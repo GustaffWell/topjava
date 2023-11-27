@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import ru.javawebinar.topjava.MealTestData;
 import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.service.UserService;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
@@ -32,6 +33,17 @@ class AdminRestControllerTest extends AbstractControllerTest {
                 // https://jira.spring.io/browse/SPR-14472
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(USER_MATCHER.contentJson(admin));
+    }
+
+    @Test
+    void getWithMeals() throws Exception {
+        User expectedUser = admin;
+        expectedUser.setMeals(MealTestData.adminMeals);
+        perform(MockMvcRequestBuilders.get(REST_URL + "with-meals/" + ADMIN_ID))
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(USER_WITH_MEALS_MATCHER.contentJson(expectedUser));
     }
 
     @Test
