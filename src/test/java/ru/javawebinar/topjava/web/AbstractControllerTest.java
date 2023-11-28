@@ -49,4 +49,8 @@ public abstract class AbstractControllerTest {
     protected ResultActions perform(MockHttpServletRequestBuilder builder) throws Exception {
         return mockMvc.perform(builder);
     }
+
+    protected boolean isDataJpaBased() {
+        return Profiles.REPOSITORY_IMPLEMENTATION.equals(Profiles.DATAJPA);
+    }
 }

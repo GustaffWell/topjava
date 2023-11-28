@@ -1,7 +1,7 @@
 package ru.javawebinar.topjava.util.formatter;
 
 import org.springframework.format.Formatter;
-import org.springframework.util.StringUtils;
+import ru.javawebinar.topjava.util.DateTimeUtil;
 
 import java.text.ParseException;
 import java.time.LocalDate;
@@ -10,7 +10,7 @@ import java.util.Locale;
 public class DateFormatter implements Formatter<LocalDate> {
     @Override
     public LocalDate parse(String text, Locale locale) throws ParseException {
-        return StringUtils.hasLength(text) ? LocalDate.parse(text) : null;
+        return DateTimeUtil.parseLocalDate(text);
     }
 
     @Override
