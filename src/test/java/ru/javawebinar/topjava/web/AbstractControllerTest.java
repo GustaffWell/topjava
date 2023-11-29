@@ -55,6 +55,7 @@ public abstract class AbstractControllerTest {
     }
 
     protected boolean isDataJpaBased() {
-        return environment.acceptsProfiles(org.springframework.core.env.Profiles.of(Profiles.DATAJPA));
+//        return environment.acceptsProfiles(org.springframework.core.env.Profiles.of(Profiles.DATAJPA));
+        return environment.matchesProfiles(Profiles.DATAJPA);
     }
 }
