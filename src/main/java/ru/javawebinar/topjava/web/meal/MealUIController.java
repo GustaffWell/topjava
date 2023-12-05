@@ -19,19 +19,19 @@ public class MealUIController extends AbstractMealController {
 
     @Override
     @GetMapping
-    public @ResponseBody List<MealTo> getAll() {
+    public List<MealTo> getAll() {
         return super.getAll();
     }
 
     @Override
-    @DeleteMapping(value = "/{id}")
-    @ResponseStatus(value = HttpStatus.NO_CONTENT)
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable int id) {
         super.delete(id);
     }
 
     @PostMapping
-    @ResponseStatus(value = HttpStatus.NO_CONTENT)
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void create(@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime dateTime,
                        @RequestParam String description,
                        @RequestParam int calories) {
@@ -40,7 +40,7 @@ public class MealUIController extends AbstractMealController {
     }
 
     @Override
-    @PostMapping(value = "/filter")
+    @PostMapping("/filter")
     public List<MealTo> getBetween(
             @RequestParam @Nullable LocalDate startDate,
             @RequestParam @Nullable LocalTime startTime,

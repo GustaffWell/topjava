@@ -9,12 +9,15 @@ const ctx = {
 };
 
 function enable(checkbox, id) {
+    let enabled = checkbox.is(":checked");
     $.ajax({
         url: userAjaxUrl + id,
         type: "POST",
-        data: "enabled=" + checkbox.is(":checked")
+        data: "enabled=" + enabled
     }).done(function () {
         ctx.updateTable();
+    }).fail(function () {
+        $(checkbox).prop("checked", !enabled);
     });
 }
 

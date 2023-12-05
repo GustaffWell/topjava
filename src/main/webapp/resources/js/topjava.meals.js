@@ -14,11 +14,8 @@ function updateFilteredTable() {
 }
 
 function clearFilter() {
-    $.ajax({
-        type: "POST",
-        url: mealAjaxUrl + "filter",
-        data: $("#filter")[0].reset()
-    }).done(updateTableData);
+    $("#filter")[0].reset();
+    ctx.updateTable();
 }
 $(function () {
     makeEditable(
