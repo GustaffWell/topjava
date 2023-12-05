@@ -2,8 +2,21 @@ const userAjaxUrl = "admin/users/";
 
 // https://stackoverflow.com/a/5064235/548473
 const ctx = {
-    ajaxUrl: userAjaxUrl
+    ajaxUrl: userAjaxUrl,
+    updateTable: function () {
+        $.get(userAjaxUrl, updateTableData);
+    }
 };
+
+function enable(checkbox, id) {
+    $.ajax({
+        url: userAjaxUrl + id,
+        type: "POST",
+        data: "enabled=" + checkbox.is(":checked")
+    }).done(function () {
+        ctx.updateTable();
+    });
+}
 
 // $(document).ready(function () {
 $(function () {
