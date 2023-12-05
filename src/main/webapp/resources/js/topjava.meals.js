@@ -1,4 +1,4 @@
-const mealAjaxUrl = "meals/";
+const mealAjaxUrl = "ajax/meals/";
 
 const ctx = {
     ajaxUrl: mealAjaxUrl,
@@ -7,7 +7,7 @@ const ctx = {
 
 function updateFilteredTable() {
     $.ajax({
-        type: "POST",
+        type: "GET",
         url: mealAjaxUrl + "filter",
         data: $("#filter").serialize()
     }).done(updateTableData);
@@ -15,7 +15,7 @@ function updateFilteredTable() {
 
 function clearFilter() {
     $("#filter")[0].reset();
-    ctx.updateTable();
+    $.get(mealAjaxUrl, updateTableData);
 }
 $(function () {
     makeEditable(
