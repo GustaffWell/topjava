@@ -15,6 +15,7 @@
                 <button class="btn btn-primary my-1" type="submit">
                     <span class="fa fa-sign-out"></span>
                 </button>
+                <jsp:include page="dropdown_i18n.jsp"/>
             </form:form>
         </sec:authorize>
         <sec:authorize access="isAnonymous()">
@@ -24,6 +25,7 @@
                 <button class="btn btn-success" type="submit">
                     <span class="fa fa-sign-in"></span>
                 </button>
+                <jsp:include page="dropdown_i18n.jsp"/>
             </form:form>
         </sec:authorize>
     </div>
