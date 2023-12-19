@@ -73,7 +73,7 @@ public abstract class AbstractControllerTest {
     }
 
     private String getMessage(String code) {
-        return messageSourceAccessor.getMessage(code, Locale.ENGLISH);
+        return messageSourceAccessor.getMessage(code);
     }
 
     public ResultMatcher errorType(ErrorType type) {
